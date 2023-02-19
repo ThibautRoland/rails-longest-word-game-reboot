@@ -1,0 +1,8 @@
+<div class="container">
+  <div class="card my-4 p-4">
+    <p class="border-bottom">your word: <%= @attempt %></p>
+    <p>your score: <%= @result[:score] %></p>
+    <p><%= @result[:message] %></p>
+  </div>
+  <%= link_to "play again", new_path %>
+</div>
