@@ -4,23 +4,23 @@ require 'json'
 class GamesController < ApplicationController
   def new
     @letters = []
+    @start_time = Time.now
     10.times do
       @letters << ('A'..'Z').to_a.sample
     end
-    # @start_time = Time.now
   end
 
   def score
     @end_time = Time.now
     @attempt = params[:word]
     @grid = params[:letters].split
-    # @game_time = @end_time - @start_time
+    @game_time = @end_time - Time.parse(params[:start_time])
     url = "https://wagon-dictionary.herokuapp.com/#{@attempt}"
     user_serialized = URI.open(url).read
     user = JSON.parse(user_serialized)
     @result = {}
     if user["found"] && included?(@grid, @attempt)
-      @result[:score] = @attempt.length * 3
+      @result[:score] = ((@attempt.length * 1000)/@game_time).round
       @result[:message] = "well done"
     elsif user["found"] == false && included?(@grid, @attempt)
       @result[:score] = 0
